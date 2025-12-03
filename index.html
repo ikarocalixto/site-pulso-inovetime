@@ -61,6 +61,70 @@
             animation: scale-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
+        /* Slider Animation */
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-250px * 7)); } /* Ajuste baseado na largura e qtd de slides */
+        }
+
+        .slider {
+            height: 150px;
+            margin: auto;
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+        }
+        
+        .slider::before,
+        .slider::after {
+            background: linear-gradient(to right, #000000 0%, rgba(255, 255, 255, 0) 100%);
+            content: "";
+            height: 150px;
+            position: absolute;
+            width: 100px; /* Largura do fade */
+            z-index: 2;
+        }
+        
+        .slider::after {
+            right: 0;
+            top: 0;
+            transform: rotateZ(180deg);
+        }
+
+        .slider::before {
+            left: 0;
+            top: 0;
+        }
+
+        .slide-track {
+            animation: scroll 40s linear infinite;
+            display: flex;
+            width: calc(250px * 14); /* Largura do slide * total de slides (originais + duplicados) */
+        }
+
+        .slide {
+            height: 150px;
+            width: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 20px;
+        }
+
+        .slide img {
+            max-width: 100%;
+            max-height: 100%;
+            filter: brightness(0) invert(1); /* Logos brancas */
+            transition: all 0.3s ease;
+            opacity: 0.8;
+        }
+
+        .slide img:hover {
+            filter: grayscale(0%) brightness(1); /* Cor original no hover */
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
         .glass-panel {
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(10px);
@@ -587,6 +651,7 @@
             );
         };
 
+        // Seção Restaurada: Os 3 Cards "Como o PULS atua"
         const Mechanism = ({ onOpenModal }) => {
             const steps = [
                 {
@@ -605,16 +670,21 @@
                     desc: "Não é só robô. Você recebe análise contínua de tráfego pago e recomendações de especialistas."
                 }
             ];
+
             return (
-                <section id="como-funciona" className="py-24 relative overflow-hidden">
+                <section className="py-24 relative overflow-hidden bg-[#050507]">
                     <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-[#00e5ff]/5 to-transparent"></div>
+                    
                     <div className="container mx-auto px-6 relative z-10">
                         <div className="text-center mb-20">
                             <h2 className="text-3xl md:text-5xl font-bold mb-4">Como o <span className="text-[#00e5ff]">PULS</span> atua</h2>
                             <p className="text-gray-400">Do clique à conversão, sem perder o timing.</p>
                         </div>
+
                         <div className="grid md:grid-cols-3 gap-8 relative mb-16">
+                            {/* Connecting Line */}
                             <div className="hidden md:block absolute top-12 left-[16%] right-[16%] h-[2px] bg-gradient-to-r from-transparent via-gray-700 to-transparent z-0"></div>
+
                             {steps.map((step, idx) => (
                                 <div key={idx} className="relative z-10 group cursor-pointer" onClick={onOpenModal}>
                                     <div className="bg-[#0a0a0c] border border-white/10 p-8 rounded-2xl h-full hover:border-[#00e5ff]/50 transition-colors duration-300">
@@ -627,8 +697,120 @@
                                 </div>
                             ))}
                         </div>
+                        
                         <div className="flex justify-center">
                             <PrimaryButton onClick={onOpenModal}>Ver o PULS em ação na minha loja</PrimaryButton>
+                        </div>
+                    </div>
+                </section>
+            );
+        };
+
+        // Nova Seção: JORNADA DE AUTOMAÇÃO (Inspirado na imagem do usuário)
+        const AutomationJourney = ({ onOpenModal }) => {
+            return (
+                <section className="py-24 relative overflow-hidden bg-[#030305]">
+                     {/* Background glow para dar profundidade */}
+                    <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-[#00e5ff] rounded-full blur-[150px] opacity-5 -translate-y-1/2 pointer-events-none"></div>
+
+                    <div className="container mx-auto px-6 relative z-10">
+                        <div className="grid lg:grid-cols-2 gap-16 items-center">
+                            
+                            {/* Lado Esquerdo: A Jornada Visual (Cards) */}
+                            <div className="relative">
+                                {/* Linha conectora pontilhada */}
+                                <div className="absolute left-8 top-10 bottom-10 w-0.5 border-l-2 border-dashed border-[#00e5ff]/20 hidden md:block"></div>
+
+                                {/* Passo 1: Navegação */}
+                                <div className="relative mb-8 md:ml-12 group">
+                                    <div className="glass-panel p-4 rounded-2xl flex items-center gap-4 relative z-10 hover:border-[#00e5ff]/50 transition-colors">
+                                        <div className="w-12 h-12 rounded-full bg-gray-800 overflow-hidden border border-white/10 flex-shrink-0">
+                                            {/* Avatar da Júlia (Placeholder Atualizado) */}
+                                            <img 
+                                                src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=200&auto=format&fit=crop" 
+                                                alt="Júlia" 
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </div>
+                                        <div className="text-white font-medium">Júlia navega pela loja</div>
+                                        {/* Ícone flutuante */}
+                                        <div className="absolute -right-3 -top-3 w-10 h-10 rounded-full bg-[#1a1a1c] border border-[#00e5ff] flex items-center justify-center text-[#00e5ff] shadow-[0_0_15px_rgba(0,229,255,0.3)]">
+                                            <Icon name="Activity" size={18} />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Passo 2: A Mensagem (O Gancho) */}
+                                <div className="relative mb-8 md:ml-24 group">
+                                    <div className="bg-[#00e5ff]/10 border border-[#00e5ff]/30 p-6 rounded-2xl relative z-10 backdrop-blur-sm">
+                                        <div className="text-xs text-[#00e5ff] font-bold mb-2 uppercase tracking-wider flex items-center gap-2">
+                                            <Icon name="MessageSquare" size={12} /> WhatsApp PULS
+                                        </div>
+                                        <p className="text-white text-sm font-medium mb-3">"Oi Júlia, notamos que você gostou destes produtos..."</p>
+                                        <div className="flex gap-2">
+                                            <div className="w-16 h-16 bg-white/10 rounded-lg flex items-center justify-center text-xs text-gray-400 border border-white/5">Produto A</div>
+                                            <div className="w-16 h-16 bg-white/10 rounded-lg flex items-center justify-center text-xs text-gray-400 border border-white/5">Produto B</div>
+                                        </div>
+                                        {/* Ícone flutuante */}
+                                        <div className="absolute -right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-[#1a1a1c] border border-[#00e5ff] flex items-center justify-center text-[#00e5ff] shadow-[0_0_15px_rgba(0,229,255,0.3)]">
+                                            <Icon name="Zap" size={18} />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Passo 3: Compra */}
+                                <div className="relative md:ml-12 group">
+                                    <div className="glass-panel p-4 rounded-2xl flex items-center gap-4 relative z-10 hover:border-[#00e5ff]/50 transition-colors">
+                                        <div className="w-12 h-12 rounded-full bg-gray-800 overflow-hidden border border-white/10 flex-shrink-0">
+                                            <img 
+                                                src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=200&auto=format&fit=crop" 
+                                                alt="Júlia" 
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </div>
+                                        <div>
+                                            <div className="text-white font-medium">Júlia faz a compra</div>
+                                            <div className="text-xs text-[#00ff9d]">Venda concluida com sucesso!</div>
+                                        </div>
+                                        {/* Ícone flutuante */}
+                                        <div className="absolute -right-3 -bottom-3 w-10 h-10 rounded-full bg-[#00ff9d] text-black border border-white flex items-center justify-center shadow-[0_0_15px_rgba(0,255,157,0.5)]">
+                                            <Icon name="Check" size={20} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Lado Direito: Copy & Explicação */}
+                            <div>
+                                <h3 className="text-[#00e5ff] text-sm font-bold uppercase tracking-[0.2em] mb-4">Para otimizar seus esforços</h3>
+                                <h2 className="text-5xl md:text-7xl font-bold text-white mb-8 tracking-tighter">
+                                    AUTOMATIZE
+                                </h2>
+                                <p className="text-gray-400 text-lg leading-relaxed mb-12">
+                                    Aproveite o poder da inteligência artificial para e-commerce para maximizar as oportunidades de venda. 
+                                    Use mensagens eficazes no WhatsApp para recuperar carrinhos abandonados, ativar leads frios e aumentar o LTV.
+                                </p>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                                    <div className="border-t border-white/10 pt-6">
+                                        <h4 className="text-white font-bold mb-2 text-lg">Mais de 20 automações</h4>
+                                        <p className="text-gray-500 text-sm">Prontas para usar ou personalizar conforme a estratégia da sua loja.</p>
+                                    </div>
+                                    <div className="border-t border-white/10 pt-6">
+                                        <h4 className="text-white font-bold mb-2 text-lg">Recomendação IA</h4>
+                                        <p className="text-gray-500 text-sm">Apresente produtos personalizados baseados no comportamento de navegação.</p>
+                                    </div>
+                                    <div className="border-t border-white/10 pt-6">
+                                        <h4 className="text-white font-bold mb-2 text-lg">Fidelidade Automática</h4>
+                                        <p className="text-gray-500 text-sm">Impulsione o crescimento com programas de recompra e indicação.</p>
+                                    </div>
+                                </div>
+
+                                <PrimaryButton onClick={onOpenModal} width="full" className="md:w-auto">
+                                    Quero automatizar minha loja
+                                </PrimaryButton>
+                            </div>
+
                         </div>
                     </div>
                 </section>
@@ -750,21 +932,38 @@
             );
         };
 
+        // Novo Componente TrustedCompanies: CARROSSEL DE LOGOS INFINITO
         const TrustedCompanies = () => {
-            const companies = ["E-comm Alpha", "ModaVibe", "TechStore", "BeautyLabs", "FitGear", "UrbanStyle"];
             return (
-                <section className="py-16 bg-black border-t border-white/5">
-                    <div className="container mx-auto px-6 text-center">
-                        <p className="text-gray-400 uppercase tracking-widest text-sm mb-8 font-medium">Empresas que confiam na nossa metodologia</p>
-                        <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
-                            {companies.map((company, idx) => (
-                                <div key={idx} className="text-xl md:text-2xl font-bold font-mono text-white/40 hover:text-white transition-colors cursor-default">
-                                    {company}
-                                </div>
-                            ))}
+                <section className="py-16 bg-black border-t border-white/5 overflow-hidden">
+                    <div className="container mx-auto px-6 text-center mb-8">
+                        <p className="text-gray-400 uppercase tracking-widest text-sm font-medium">Empresas que confiam na nossa metodologia</p>
+                    </div>
+                    
+                    <div className="slider">
+                        <div className="slide-track">
+                            <div className="slide"><img decoding="async" src="https://d5gag3xtge2og.cloudfront.net/producao/34278002/M/ladygriffe_250_x_150_px_4.png" alt="Logo da Marca Lady Griffe" /></div>
+                            <div className="slide"><img decoding="async" src="https://lugriffe.com.br/wp-content/uploads/2025/06/LuGriffe-Store-1000-x-1000-px-2000-x-1000-px.png" alt="Logo da Marca LuGriffe" /></div>
+                            <div className="slide"><img decoding="async" src="https://alethe.com.br/wp-content/webp-express/webp-images/uploads/2024/04/empresa-1-1.png.webp" alt="Logo da Marca Alethe" /></div>
+                            <div className="slide"><img decoding="async" src="https://glowtoyouoficial.com.br/wp-content/uploads/2024/04/Glow-to-you-945-x-200-px.png" alt="Logo da Marca Glow To You" /></div>
+                            <div className="slide"><img decoding="async" src="https://inovetime.com.br/wp-content/uploads/empresa-1.png" alt="Logo da Marca Inovetime" /></div>
+                            <div className="slide"><img decoding="async" src="https://i0.wp.com/inovetime.com.br/wp-content/uploads/cropped-LOGO-FAIXA-FRANQUIA-inv-2.png?resize=1320%2C386&amp;ssl=1" alt="Logo da Franquia Inovetime" /></div>
+                            <div className="slide"><img decoding="async" src="https://momentogriffe.com.br/wp-content/uploads/2024/04/Logo-Momento-Griffe-1.png" alt="Logo da Marca Momento Griffe" /></div>
+                            
+                            {/* Logos Duplicados para Efeito Infinito */}
+                            <div className="slide"><img decoding="async" src="https://d5gag3xtge2og.cloudfront.net/producao/34278002/M/ladygriffe_250_x_150_px_4.png" alt="Logo da Marca Lady Griffe" /></div>
+                            <div className="slide"><img decoding="async" src="https://lugriffe.com.br/wp-content/uploads/2025/06/LuGriffe-Store-1000-x-1000-px-2000-x-1000-px.png" alt="Logo da Marca LuGriffe" /></div>
+                            <div className="slide"><img decoding="async" src="https://alethe.com.br/wp-content/webp-express/webp-images/uploads/2024/04/empresa-1-1.png.webp" alt="Logo da Marca Alethe" /></div>
+                            <div className="slide"><img decoding="async" src="https://glowtoyouoficial.com.br/wp-content/uploads/2024/04/Glow-to-you-945-x-200-px.png" alt="Logo da Marca Glow To You" /></div>
+                            <div className="slide"><img decoding="async" src="https://inovetime.com.br/wp-content/uploads/empresa-1.png" alt="Logo da Marca Inovetime" /></div>
+                            <div className="slide"><img decoding="async" src="https://i0.wp.com/inovetime.com.br/wp-content/uploads/cropped-LOGO-FAIXA-FRANQUIA-inv-2.png?resize=1320%2C386&amp;ssl=1" alt="Logo da Franquia Inovetime" /></div>
+                            <div className="slide"><img decoding="async" src="https://momentogriffe.com.br/wp-content/uploads/2024/04/Logo-Momento-Griffe-1.png" alt="Logo da Marca Momento Griffe" /></div>
                         </div>
-                        <div className="mt-12 max-w-2xl mx-auto">
-                            <p className="text-lg md:text-xl text-white font-medium italic border-l-2 border-[#00e5ff] pl-6 py-2 bg-gradient-to-r from-white/5 to-transparent rounded-r-lg">
+                    </div>
+
+                    <div className="mt-8 container mx-auto px-6 text-center">
+                        <div className="max-w-2xl mx-auto">
+                            <p className="text-lg md:text-xl text-white font-medium italic border-l-2 border-[#00e5ff] pl-6 py-2 bg-gradient-to-r from-white/5 to-transparent rounded-r-lg inline-block">
                                 "Pare de anunciar e não saber o que está acontecendo na sua loja."
                             </p>
                         </div>
@@ -904,6 +1103,7 @@
                     <Stats />
                     <Manifesto onOpenModal={openModal} />
                     <Mechanism onOpenModal={openModal} />
+                    <AutomationJourney onOpenModal={openModal} />
                     <HumanFactor onOpenModal={openModal} />
                     <EducationalVideos onPlayVideo={(url) => setPlayingVideo(url)} />
                     <TrustedCompanies />
